@@ -1,0 +1,43 @@
+# How to Install MongoDB on Kubernetes?
+
+You can find tutorial [here]().
+
+- Install Prometheus and Grafana on Kubernetes
+- Install MongoDB Kubernetes Operator
+- Install MongoDB on Kubernetes (Standalone/Single Replica)
+- Install MongoDB on Kubernetes (Replica Set)
+- Install Cert-Manager on Kubernetes
+- Secure MongoDB with TLS/SSL
+- Configure Generic External Access with Node Port
+- Configure External Access on AWS
+- Configure External Access on GCP
+
+Include:
+- test leader election (Arbiters)
+- monitor with prometheus
+- scale up/down
+- upgrade
+- Create users with SCRAM authentication
+- Create custom roles
+- Show reference to terraform code AWS & GCP
+- pod antiaffinity for external access port forward
+- Deploy a Sharded Cluster (https://docs.mongodb.com/kubernetes-operator/master/tutorial/deploy-sharded-cluster/)
+- include load balancer price
+
+- [MongoDB Community Kubernetes Operator](https://github.com/mongodb/mongodb-kubernetes-operator)
+- [Example](https://www.mongodb.com/blog/post/run-secure-containerized-mongodb-deployments-using-the-mongo-db-community-kubernetes-oper)
+- [Deploy and Configure a MongoDB Resource](https://github.com/mongodb/mongodb-kubernetes-operator/blob/master/docs/deploy-configure.md)
+- [Kubernetes Operator Docs](https://github.com/mongodb/mongodb-kubernetes-operator/tree/master/docs)
+- [Kubernetes Operator Samples](https://github.com/mongodb/mongodb-kubernetes-operator/tree/master/config/samples)
+- [Question about configuring a simple external access](https://github.com/mongodb/mongodb-kubernetes-operator/issues/634)
+
+
+
+
+
+## Install Prometheus and Grafana on Kubernetes (v0.53.1)
+Previously we could upgrade prometheus CRD by using incremental changes with kubectl apply. That is not possible anymore since prometheus CRD is too long to fit in the "kubectl.kubernetes.io/last-applied-configuration" annotation.
+
+kubectl create -f k8s/prometheus-operator/crds
+kubectl apply -f k8s/prometheus-operator/rbac
+kubectl apply -f k8s/prometheus-operator/deployment
