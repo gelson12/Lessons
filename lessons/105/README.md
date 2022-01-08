@@ -45,3 +45,12 @@ kubectl create -f k8s/prometheus-operator/crds
 kubectl apply -f k8s/prometheus-operator/rbac
 kubectl apply -f k8s/prometheus-operator/deployment
 kubectl get pods -n monitoring
+
+(set correct persmissions otherwise you get permission denied)
+kubectl apply -f k8s/prometheus
+kubectl get pods,svc -n monitoring
+
+Deploy grafana
+
+echo -n "devops123" | base64
+place one dashboard per config map, if it grows you not going to be able to apply (there is a limit for config map size)
