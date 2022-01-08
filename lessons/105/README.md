@@ -36,8 +36,12 @@ Include:
 
 
 ## Install Prometheus and Grafana on Kubernetes (v0.53.1)
-Previously we could upgrade prometheus CRD by using incremental changes with kubectl apply. That is not possible anymore since prometheus CRD is too long to fit in the "kubectl.kubernetes.io/last-applied-configuration" annotation.
+
+Error
+- The CustomResourceDefinition "prometheuses.monitoring.coreos.com" is invalid: metadata.annotations: Too long: must have at most 262144 bytes.
+- That is not possible anymore since prometheus CRD is too long to fit in the "kubectl.kubernetes.io/last-applied-configuration" annotation.
 
 kubectl create -f k8s/prometheus-operator/crds
 kubectl apply -f k8s/prometheus-operator/rbac
 kubectl apply -f k8s/prometheus-operator/deployment
+kubectl get pods -n monitoring
