@@ -3,10 +3,11 @@ apiVersion: mongodbcommunity.mongodb.com/v1
 kind: MongoDBCommunity
 metadata:
   name: mongodb-standalone
+  namespace: mongodb
 spec:
   members: 1
   type: ReplicaSet
-  version: "4.2.6"
+  version: "4.2.7"
   security:
     authentication:
       modes: ["SCRAM"]
@@ -20,6 +21,22 @@ spec:
       db: admin
     - name: userAdminAnyDatabase
       db: admin
-      scramCredentialsSecretName: my-scram
+    scramCredentialsSecretName: my-scram
   additionalMongodConfig:
     storage.wiredTiger.engineConfig.journalCompressor: zlib
+  statefulSet:
+    spec:
+      volumeClaimTemplates:
+      - apiVersion: v1
+        kind: PersistentVolumeClaim
+        metadata:
+          name: data-volume
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 40G
+          volumeMode: Filesystem
+
+# replicaSetHorizons

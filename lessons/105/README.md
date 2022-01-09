@@ -72,3 +72,7 @@ kubectl get pods -n mongodb
 ## Install MongoDB on Kubernetes (Standalone/Single Replica)
 
 kubectl apply -f k8s/mongodb/standalone/
+kubectl get pods -n mongodb
+kubectl get secret mongodb-standalone-admin-admin-user -o yaml -n mongodb
+
+kubectl get secret mongodb-standalone-admin-admin-user -n mongodb -o json | jq -r '.data | with_entries(.value |= @base64d)'
