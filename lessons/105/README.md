@@ -150,3 +150,9 @@ run application after prometheus and grafana is configured, maybe load test
 
 - [MongoDB Connection Types](https://docs.mongodb.com/manual/reference/command/serverStatus/#connections)
 - [Prometheus Old/New Metrics](https://github.com/percona/mongodb_exporter/blob/v0.30.0/exporter/v1_compatibility.go)
+
+import mongodb grafana dashboard from json
+
+deploy cadvisor
+kubectl apply -f k8s/cadvisor
+https://grafana.com/grafana/dashboards/315

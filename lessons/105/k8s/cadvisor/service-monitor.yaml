@@ -1,0 +1,15 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: cadvisor
+  namespace: monitoring
+  labels:
+    team: devops
+spec:
+  selector:
+    matchLabels:
+      name: cadvisor
+  endpoints:
+  - port: metrics
+    scrapeTimeout: 25s

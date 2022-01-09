@@ -2,7 +2,7 @@
 apiVersion: mongodbcommunity.mongodb.com/v1
 kind: MongoDBCommunity
 metadata:
-  name: mongodb-standalone # change name since it's not standalone
+  name: my-mongodb
   namespace: mongodb
 spec:
   members: 3
@@ -26,6 +26,27 @@ spec:
     storage.wiredTiger.engineConfig.journalCompressor: zlib
   statefulSet:
     spec:
+      template:
+        spec:
+          containers:
+          - name: mongod
+            resources:
+              limits:
+                cpu: "1"
+                memory: 2Gi
+              requests:
+                cpu: 500m
+                memory: 1Gi      
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - my-mongodb
+                topologyKey: "kubernetes.io/hostname"
       volumeClaimTemplates:
       - metadata:
           name: data-volume
