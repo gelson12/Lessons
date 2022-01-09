@@ -5,6 +5,7 @@ You can find tutorial [here]().
 - Install Prometheus and Grafana on Kubernetes
 - Install MongoDB Kubernetes Operator
 - Install MongoDB on Kubernetes (Standalone/Single Replica)
+- (Create a database user with SCRAM authentication.)
 - Install MongoDB on Kubernetes (Replica Set)
 - Install Cert-Manager on Kubernetes
 - Secure MongoDB with TLS/SSL
@@ -59,3 +60,15 @@ kubectl apply -R -f k8s/grafana
 kubectl port-forward service/prometheus-operated 9090 -n monitoring
 - show all 3 targets in prometheus
 kubectl port-forward svc/grafana 3000 -n monitoring
+
+## Install MongoDB Kubernetes Operator
+
+kubectl apply -f k8s/mongodb/namespace.yaml
+kubectl apply -f k8s/mongodb/crd.yaml
+kubectl apply -f k8s/mongodb/rbac
+kubectl apply -f k8s/mongodb/operator.yaml
+kubectl get pods -n mongodb
+
+## Install MongoDB on Kubernetes (Standalone/Single Replica)
+
+kubectl apply -f k8s/mongodb/standalone/
