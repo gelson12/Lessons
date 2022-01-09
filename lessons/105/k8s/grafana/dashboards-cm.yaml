@@ -16,11 +16,3 @@ data:
         path: /var/lib/grafana/dashboards/kubernetes
       orgId: 1
       type: file
-    - disableDeletion: false
-      editable: false
-      folder: Services
-      name: services
-      options:
-        path: /var/lib/grafana/dashboards/services
-      orgId: 1
-      type: file

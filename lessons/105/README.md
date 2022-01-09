@@ -54,3 +54,6 @@ Deploy grafana
 
 echo -n "devops123" | base64
 place one dashboard per config map, if it grows you not going to be able to apply (there is a limit for config map size)
+
+kubectl apply -R -f k8s/grafana
+kubectl port-forward svc/grafana 3000 -n monitoring
