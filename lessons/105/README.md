@@ -5,7 +5,6 @@ You can find tutorial [here]().
 - Install Prometheus and Grafana on Kubernetes
 - Install MongoDB Kubernetes Operator
 - Install MongoDB on Kubernetes (Standalone/Single Replica)
-- (Create a database user with SCRAM authentication.)
 - Install MongoDB on Kubernetes (Replica Set)
 - Install Cert-Manager on Kubernetes
 - Secure MongoDB with TLS/SSL
@@ -60,6 +59,7 @@ kubectl apply -R -f k8s/grafana
 kubectl port-forward service/prometheus-operated 9090 -n monitoring
 - show all 3 targets in prometheus
 kubectl port-forward svc/grafana 3000 -n monitoring
+deploy cadvisor
 
 ## Install MongoDB Kubernetes Operator
 
@@ -82,9 +82,10 @@ kubectl get secret mongodb-standalone-admin-admin-user -n mongodb -o json | jq -
 install MongoDB Shell
 brew install mongosh
 kubectl pod
+(go over connection string formets) Connection String URI Format - https://docs.mongodb.com/manual/reference/connection-string/
 mongosh
 mongosh "mongodb+srv://<username>:<password>@example-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true"
-kubectl port-forward service/mongodb-standalone-svc 27017 -n mongodb
+kubectl port-forward mongodb-standalone-pod-0 27017 -n mongodb
 (mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000)
 
 mongosh "mongodb://admin-user:devops123@127.0.0.1:27017/admin?directConnection=true&serverSelectionTimeoutMS=2000"
@@ -94,9 +95,9 @@ use store
 db.user.insertOne({name: "Anton"})
 rs.status()
 rs.printSecondaryReplicationInfo()
-rs.conf()
+
 db.getUsers()
-use admin
+
 db.createUser(
   {
     user: 'aputra',
@@ -104,7 +105,36 @@ db.createUser(
     roles: [ { role: 'readWrite', db: 'store' } ]
   }
 );
-
+db.auth('aputra', 'devops123')
 
 use store
-db.grantRolesToUser('aputra', [{ role: 'root', db: 'store' }])
+db.users.insertOne({name: "Anton"})
+
+db.users.find()
+
+prometheus
+
+## Install MongoDB on Kubernetes (Replica Set)
+
+scale up from 1 to 3
+explain why it's hard to connect from local host to primary
+- [percona/mongodb_exporter](https://github.com/percona/mongodb_exporter)
+- https://grafana.com/grafana/dashboards/7353
+
+rs.status()
+connect to secondary
+try to add item
+connect to primary and add item
+
+(update time, maybe??) (Yekaterinburg Standard Time)
+rs.printSecondaryReplicationInfo()
+
+Create user woth k8s object
+      {
+         "role":"clusterMonitor",
+         "db":"admin"
+      },
+      {
+         "role":"read",
+         "db":"local"
+      }

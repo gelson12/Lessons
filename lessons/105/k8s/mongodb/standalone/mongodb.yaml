@@ -2,10 +2,10 @@
 apiVersion: mongodbcommunity.mongodb.com/v1
 kind: MongoDBCommunity
 metadata:
-  name: mongodb-standalone
+  name: mongodb-standalone # change name since it's not standalone
   namespace: mongodb
 spec:
-  members: 1
+  members: 3
   type: ReplicaSet
   version: "5.0.5"
   security:

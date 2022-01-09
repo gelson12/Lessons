@@ -42,7 +42,7 @@ resource "aws_eks_node_group" "public-nodes" {
   instance_types = ["t3.small"]
 
   scaling_config {
-    desired_size = 3
+    desired_size = 4
     max_size     = 5
     min_size     = 0
   }
