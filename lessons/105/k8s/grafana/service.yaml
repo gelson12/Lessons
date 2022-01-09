@@ -4,6 +4,8 @@ kind: Service
 metadata:
   namespace: monitoring
   name: grafana
+  labels:
+    app: grafana
 spec:
   type: ClusterIP
   ports:

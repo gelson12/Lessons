@@ -44,13 +44,23 @@ spec:
         - name: config
           mountPath: "/etc/grafana/grafana.ini"
           subPath: grafana.ini
+        - name: storage
+          mountPath: "/var/lib/grafana"
         - name: dashboards
           mountPath: "/etc/grafana/provisioning/dashboards/dashboardproviders.yaml"
           subPath: dashboardproviders.yaml
-        - name: storage
-          mountPath: "/var/lib/grafana"
-        - name: kubernetes-dashboards
-          mountPath: "/var/lib/grafana/dashboards/kubernetes/"
+        - name: datasources
+          mountPath: "/etc/grafana/provisioning/datasources/datasources.yaml"
+          subPath: datasources.yaml
+        - name: prometheus-dashboard
+          mountPath: "/var/lib/grafana/dashboards/kubernetes/prometheus.json"
+          subPath: prometheus.json
+        - name: prometheus-operator-dashboard
+          mountPath: "/var/lib/grafana/dashboards/kubernetes/prometheus-operator.json"
+          subPath: prometheus-operator.json
+        - name: grafana-dashboard
+          mountPath: "/var/lib/grafana/dashboards/kubernetes/grafana.json"
+          subPath: grafana.json
         ports:
         - name: grafana
           containerPort: 3000
@@ -94,6 +104,15 @@ spec:
       - name: storage
         persistentVolumeClaim:
           claimName: grafana
-      - name: kubernetes-dashboards
+      - name: datasources
         configMap:
-          name: kubernetes-dashboards
+          name: datasources
+      - name: prometheus-dashboard
+        configMap:
+          name: prometheus-dashboard
+      - name: prometheus-operator-dashboard
+        configMap:
+          name: prometheus-operator-dashboard
+      - name: grafana-dashboard
+        configMap:
+          name: grafana-dashboard
