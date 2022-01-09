@@ -73,6 +73,38 @@ kubectl get pods -n mongodb
 
 kubectl apply -f k8s/mongodb/standalone/
 kubectl get pods -n mongodb
+kubectl get pvc -n mongodb
 kubectl get secret mongodb-standalone-admin-admin-user -o yaml -n mongodb
 
 kubectl get secret mongodb-standalone-admin-admin-user -n mongodb -o json | jq -r '.data | with_entries(.value |= @base64d)'
+
+
+install MongoDB Shell
+brew install mongosh
+kubectl pod
+mongosh
+mongosh "mongodb+srv://<username>:<password>@example-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true"
+kubectl port-forward service/mongodb-standalone-svc 27017 -n mongodb
+(mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000)
+
+mongosh "mongodb://admin-user:devops123@127.0.0.1:27017/admin?directConnection=true&serverSelectionTimeoutMS=2000"
+
+show dbs
+use store
+db.user.insertOne({name: "Anton"})
+rs.status()
+rs.printSecondaryReplicationInfo()
+rs.conf()
+db.getUsers()
+use admin
+db.createUser(
+  {
+    user: 'aputra',
+    pwd: 'devops123',
+    roles: [ { role: 'readWrite', db: 'store' } ]
+  }
+);
+
+
+use store
+db.grantRolesToUser('aputra', [{ role: 'root', db: 'store' }])
