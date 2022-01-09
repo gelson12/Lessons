@@ -2,10 +2,11 @@
 
 You can find tutorial [here]().
 
-- Install Prometheus and Grafana on Kubernetes
 - Install MongoDB Kubernetes Operator
 - Install MongoDB on Kubernetes (Standalone/Single Replica)
 - Install MongoDB on Kubernetes (Replica Set)
+- Install Prometheus and Grafana on Kubernetes
+- Monitor MongoDB with Prometheus
 - Install Cert-Manager on Kubernetes
 - Secure MongoDB with TLS/SSL
 - Configure Generic External Access with Node Port
@@ -138,3 +139,14 @@ Create user woth k8s object
          "role":"read",
          "db":"local"
       }
+
+
+kubectl run -i --tty --rm busybox --image=busybox -- sh
+nslookup -q=SRV mongodb-standalone-svc.mongodb.svc.cluster.local
+
+docker pull percona/mongodb_exporter:0.30
+
+run application after prometheus and grafana is configured, maybe load test
+
+- [MongoDB Connection Types](https://docs.mongodb.com/manual/reference/command/serverStatus/#connections)
+- [Prometheus Old/New Metrics](https://github.com/percona/mongodb_exporter/blob/v0.30.0/exporter/v1_compatibility.go)
