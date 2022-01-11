@@ -75,9 +75,9 @@ kubectl get pods -n mongodb
 kubectl apply -f k8s/mongodb/standalone/
 kubectl get pods -n mongodb
 kubectl get pvc -n mongodb
-kubectl get secret mongodb-standalone-admin-admin-user -o yaml -n mongodb
+kubectl get secret my-mongodb-admin-admin-user -o yaml -n mongodb
 
-kubectl get secret mongodb-standalone-admin-admin-user -n mongodb -o json | jq -r '.data | with_entries(.value |= @base64d)'
+kubectl get secret my-mongodb-admin-admin-user -n mongodb -o json | jq -r '.data | with_entries(.value |= @base64d)'
 
 
 install MongoDB Shell
@@ -155,4 +155,5 @@ import mongodb grafana dashboard from json
 
 deploy cadvisor
 kubectl apply -f k8s/cadvisor
-https://grafana.com/grafana/dashboards/315
+https://grafana.com/grafana/dashboards/315 (not usefull)
+get dasboard from kube-prometheus

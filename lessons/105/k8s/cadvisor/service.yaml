@@ -9,7 +9,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 6767
+  - port: 8080
     name: metrics
   selector:
     name: cadvisor
