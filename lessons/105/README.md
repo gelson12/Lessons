@@ -93,13 +93,44 @@ kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6
 
 ## Secure MongoDB with TLS/SSL
 
+kubectl exec -it my-mongodb-0 -- bash
+
 mongosh \
   --tls \
   --tlsCAFile /var/lib/tls/ca/ca.crt \
   --tlsCertificateKeyFile /var/lib/tls/server/*.pem \
   "mongodb+srv://admin-user:devops123@my-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true"
 
+mongosh \
+  --tls \
+  --tlsCAFile /var/lib/tls/ca/ca.crt \
+  --tlsCertificateKeyFile /var/lib/tls/server/*.pem \
+  "mongodb://admin-user:devops123@my-mongodb-0.devopsbyexample.io:27017,my-mongodb-1.devopsbyexample.io:27017,my-mongodb-2.devopsbyexample.io:27017/admin?directConnection=true&serverSelectionTimeoutMS=2000"
 
+Create SRV record
+
+_mongodb._tcp.my-mongodb
+
+0 50 27017 my-mongodb-0.devopsbyexample.io.
+0 50 27017 my-mongodb-1.devopsbyexample.io.
+0 50 27017 my-mongodb-2.devopsbyexample.io.
+
+cat /var/lib/tls/server/*.pem
+cat /var/lib/tls/ca/ca.crt
+code certificateKey.pem
+code ca.pem
+
+mongosh \
+  --tls \
+  --tlsCAFile ca.pem \
+  --tlsCertificateKeyFile certificateKey.pem \
+  "mongodb://admin-user:devops123@my-mongodb-0.devopsbyexample.io:27017,my-mongodb-1.devopsbyexample.io:27017,my-mongodb-2.devopsbyexample.io:27017/admin?serverSelectionTimeoutMS=2000"
+
+mongosh \
+  --tls \
+  --tlsCAFile ca.pem \
+  --tlsCertificateKeyFile certificateKey.pem \
+  "mongodb+srv://admin-user:devops123@my-mongodb.devopsbyexample.io/admin?ssl=true"
 
 ## Install Prometheus and Grafana on Kubernetes (v0.53.1)
 
