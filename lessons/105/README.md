@@ -39,10 +39,15 @@ kubectl apply -f k8s/mongodb/crd.yaml
 kubectl apply -f k8s/mongodb/rbac
 kubectl apply -f k8s/mongodb/operator.yaml
 kubectl get pods -n mongodb
+kubectl logs \
+  -l name=mongodb-kubernetes-operator \
+  -n mongodb \
+  -f
 
 ## Install MongoDB on Kubernetes (Standalone/Single Replica)
 
-kubectl apply -f k8s/mongodb/database/
+kubectl apply -f k8s/mongodb/database/secret.yaml
+kubectl apply -f k8s/mongodb/database/mongodb.yaml
 kubectl get pods -n mongodb
 kubectl get pvc -n mongodb
 kubectl get secret my-mongodb-admin-admin-user -o yaml -n mongodb
@@ -54,12 +59,12 @@ install MongoDB Shell
 brew install mongosh
 
 (go over connection string formets) Connection String URI Format - https://docs.mongodb.com/manual/reference/connection-string/
-mongosh
+
 
 kubectl port-forward my-mongodb-0 27017 -n mongodb
 
 
-mongosh "mongodb://admin-user:devops123@127.0.0.1:27017/admin?directConnection=true&serverSelectionTimeoutMS=2000"
+mongosh "mongodb://admin-user:admin123@127.0.0.1:27017/admin?directConnection=true&serverSelectionTimeoutMS=2000"
 
 show dbs
 db.createUser(
@@ -79,7 +84,8 @@ db.employees.find()
 ## Install MongoDB on Kubernetes (Replica Set)
 
 scale up from 1 to 3
-kubectl apply -f k8s/mongodb/database
+kubectl apply -f k8s/mongodb/database/mongodb.yaml
+kubectl get pods -n mongodb
 explain why it's hard to connect from local host to primary
 
 rs.status()

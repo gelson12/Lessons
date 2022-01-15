@@ -4,8 +4,6 @@ kind: Deployment
 metadata:
   namespace: mongodb
   name: mongodb-kubernetes-operator
-  labels:
-    owner: mongodb
 spec:
   replicas: 1
   selector:
