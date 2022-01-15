@@ -145,7 +145,11 @@ kubectl get pods -n monitoring
 
 (set correct persmissions otherwise you get permission denied)
 kubectl apply -f k8s/prometheus
+
+kubectl apply -f k8s/mongodb/exporter
+
 kubectl get pods,svc -n monitoring
+kubectl port-forward svc/prometheus-operated 9090 -n monitoring
 
 Deploy grafana
 
