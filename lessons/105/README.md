@@ -5,13 +5,12 @@ You can find tutorial [here]().
 - Install MongoDB Kubernetes Operator
 - Install MongoDB on Kubernetes (Standalone/Single Replica)
 - Install MongoDB on Kubernetes (Replica Set)
-- Install Prometheus and Grafana on Kubernetes
-- Monitor MongoDB with Prometheus
 - Install Cert-Manager on Kubernetes
 - Secure MongoDB with TLS/SSL
 - Configure Generic External Access with Node Port
 - Configure External Access on AWS
-- Configure External Access on GCP
+- Install Prometheus and Grafana on Kubernetes
+- Monitor MongoDB with Prometheus
 
 Include:
 - test leader election (Arbiters)
@@ -33,6 +32,72 @@ Include:
 - [Question about configuring a simple external access](https://github.com/mongodb/mongodb-kubernetes-operator/issues/634)
 
 
+## Install MongoDB Kubernetes Operator
+
+kubectl apply -f k8s/mongodb/namespace.yaml
+kubectl apply -f k8s/mongodb/crd.yaml
+kubectl apply -f k8s/mongodb/rbac
+kubectl apply -f k8s/mongodb/operator.yaml
+kubectl get pods -n mongodb
+
+## Install MongoDB on Kubernetes (Standalone/Single Replica)
+
+kubectl apply -f k8s/mongodb/database/
+kubectl get pods -n mongodb
+kubectl get pvc -n mongodb
+kubectl get secret my-mongodb-admin-admin-user -o yaml -n mongodb
+
+kubectl get secret my-mongodb-admin-admin-user -n mongodb -o json | jq -r '.data | with_entries(.value |= @base64d)'
+
+
+install MongoDB Shell
+brew install mongosh
+kubectl pod
+(go over connection string formets) Connection String URI Format - https://docs.mongodb.com/manual/reference/connection-string/
+mongosh
+mongosh "mongodb+srv://<username>:<password>@example-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true"
+kubectl port-forward my-mongodb-0 27017 -n mongodb
+(mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000)
+
+mongosh "mongodb://admin-user:devops123@127.0.0.1:27017/admin?directConnection=true&serverSelectionTimeoutMS=2000"
+
+show dbs
+db.createUser(
+  {
+    user: 'aputra',
+    pwd: 'devops123',
+    roles: [ { role: 'readWrite', db: 'store' } ]
+  }
+);
+db.auth('aputra', 'devops123')
+
+use store
+db.employees.insertOne({name: "Anton"})
+
+db.employees.find()
+
+## Install MongoDB on Kubernetes (Replica Set)
+
+scale up from 1 to 3
+kubectl apply -f k8s/mongodb/database
+explain why it's hard to connect from local host to primary
+
+rs.status()
+rs.printSecondaryReplicationInfo()
+
+
+## Install Cert-Manager on Kubernetes
+
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
+
+
+## Secure MongoDB with TLS/SSL
+
+mongosh \
+  --tls \
+  --tlsCAFile /var/lib/tls/ca/ca.crt \
+  --tlsCertificateKeyFile /var/lib/tls/server/*.pem \
+  "mongodb+srv://admin-user:devops123@my-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true"
 
 
 
@@ -62,73 +127,10 @@ kubectl port-forward service/prometheus-operated 9090 -n monitoring
 kubectl port-forward svc/grafana 3000 -n monitoring
 deploy cadvisor
 
-## Install MongoDB Kubernetes Operator
-
-kubectl apply -f k8s/mongodb/namespace.yaml
-kubectl apply -f k8s/mongodb/crd.yaml
-kubectl apply -f k8s/mongodb/rbac
-kubectl apply -f k8s/mongodb/operator.yaml
-kubectl get pods -n mongodb
-
-## Install MongoDB on Kubernetes (Standalone/Single Replica)
-
-kubectl apply -f k8s/mongodb/standalone/
-kubectl get pods -n mongodb
-kubectl get pvc -n mongodb
-kubectl get secret my-mongodb-admin-admin-user -o yaml -n mongodb
-
-kubectl get secret my-mongodb-admin-admin-user -n mongodb -o json | jq -r '.data | with_entries(.value |= @base64d)'
 
 
-install MongoDB Shell
-brew install mongosh
-kubectl pod
-(go over connection string formets) Connection String URI Format - https://docs.mongodb.com/manual/reference/connection-string/
-mongosh
-mongosh "mongodb+srv://<username>:<password>@example-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true"
-kubectl port-forward mongodb-standalone-pod-0 27017 -n mongodb
-(mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000)
-
-mongosh "mongodb://admin-user:devops123@127.0.0.1:27017/admin?directConnection=true&serverSelectionTimeoutMS=2000"
-
-show dbs
-use store
-db.user.insertOne({name: "Anton"})
-rs.status()
-rs.printSecondaryReplicationInfo()
-
-db.getUsers()
-
-db.createUser(
-  {
-    user: 'aputra',
-    pwd: 'devops123',
-    roles: [ { role: 'readWrite', db: 'store' } ]
-  }
-);
-db.auth('aputra', 'devops123')
-
-use store
-db.users.insertOne({name: "Anton"})
-
-db.users.find()
-
-prometheus
-
-## Install MongoDB on Kubernetes (Replica Set)
-
-scale up from 1 to 3
-explain why it's hard to connect from local host to primary
 - [percona/mongodb_exporter](https://github.com/percona/mongodb_exporter)
 - https://grafana.com/grafana/dashboards/7353
-
-rs.status()
-connect to secondary
-try to add item
-connect to primary and add item
-
-(update time, maybe??) (Yekaterinburg Standard Time)
-rs.printSecondaryReplicationInfo()
 
 Create user woth k8s object
       {
@@ -142,7 +144,9 @@ Create user woth k8s object
 
 
 kubectl run -i --tty --rm busybox --image=busybox -- sh
-nslookup -q=SRV mongodb-standalone-svc.mongodb.svc.cluster.local
+nslookup -q=SRV my-mongodb-svc.mongodb.svc.cluster.local
+
+my-mongodb-0.my-mongodb-svc.mongodb.svc.cluster.local
 
 docker pull percona/mongodb_exporter:0.30
 
