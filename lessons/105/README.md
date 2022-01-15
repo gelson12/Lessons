@@ -52,12 +52,12 @@ kubectl get secret my-mongodb-admin-admin-user -n mongodb -o json | jq -r '.data
 
 install MongoDB Shell
 brew install mongosh
-kubectl pod
+
 (go over connection string formets) Connection String URI Format - https://docs.mongodb.com/manual/reference/connection-string/
 mongosh
-mongosh "mongodb+srv://<username>:<password>@example-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true"
+
 kubectl port-forward my-mongodb-0 27017 -n mongodb
-(mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000)
+
 
 mongosh "mongodb://admin-user:devops123@127.0.0.1:27017/admin?directConnection=true&serverSelectionTimeoutMS=2000"
 
@@ -88,7 +88,20 @@ rs.printSecondaryReplicationInfo()
 
 ## Install Cert-Manager on Kubernetes
 
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
+<!-- kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml -->
+
+helm repo add jetstack \
+    https://charts.jetstack.io
+
+helm repo update
+
+kubectl create -f k8s/prometheus-operator/crds
+
+helm install cert-105 jetstack/cert-manager \
+  --namespace cert-manager \
+  --version v1.6.1 \
+  --create-namespace \
+  --values cert-manager-values.yaml
 
 
 ## Secure MongoDB with TLS/SSL
@@ -138,7 +151,6 @@ Error
 - The CustomResourceDefinition "prometheuses.monitoring.coreos.com" is invalid: metadata.annotations: Too long: must have at most 262144 bytes.
 - That is not possible anymore since prometheus CRD is too long to fit in the "kubectl.kubernetes.io/last-applied-configuration" annotation.
 
-kubectl create -f k8s/prometheus-operator/crds
 kubectl apply -f k8s/prometheus-operator/rbac
 kubectl apply -f k8s/prometheus-operator/deployment
 kubectl get pods -n monitoring
