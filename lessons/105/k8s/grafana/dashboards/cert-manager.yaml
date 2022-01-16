@@ -5,7 +5,7 @@ metadata:
   namespace: monitoring
   name: cert-manager-dashboard
 data:
-  prometheus.json: |-
+  cert-manager.json: |-
     {
       "annotations": {
         "list": [
