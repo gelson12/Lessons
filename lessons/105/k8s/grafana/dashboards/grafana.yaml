@@ -31,8 +31,7 @@ data:
       "fiscalYearStartMonth": 0,
       "gnetId": 3590,
       "graphTooltip": 0,
-      "id": 4,
-      "iteration": 1641724255639,
+      "iteration": 1642321659139,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -1800,7 +1799,7 @@ data:
         ]
       },
       "time": {
-        "from": "now-15m",
+        "from": "now-30m",
         "to": "now"
       },
       "timepicker": {
@@ -1831,6 +1830,6 @@ data:
       "timezone": "browser",
       "title": "Grafana Internals",
       "uid": "3XNkqkJnk",
-      "version": 3,
+      "version": 1,
       "weekStart": ""
     }

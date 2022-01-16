@@ -176,11 +176,13 @@ place one dashboard per config map, if it grows you not going to be able to appl
 
 kubectl apply -f k8s/cadvisor
 
-kubectl apply -R -f k8s/grafana
+
 kubectl port-forward service/prometheus-operated 9090 -n monitoring
 - show all 3 targets in prometheus
+
+kubectl apply -R -f k8s/grafana
 kubectl port-forward svc/grafana 3000 -n monitoring
-deploy cadvisor
+
 
 
 

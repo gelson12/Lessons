@@ -29,7 +29,6 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 4,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -204,6 +203,7 @@ data:
           "type": "timeseries"
         }
       ],
+      "refresh": "30s",
       "schemaVersion": 34,
       "style": "dark",
       "tags": [],
@@ -211,7 +211,7 @@ data:
         "list": []
       },
       "time": {
-        "from": "now-1h",
+        "from": "now-30m",
         "to": "now"
       },
       "timepicker": {},
