@@ -214,7 +214,3 @@ run application after prometheus and grafana is configured, maybe load test
 
 import mongodb grafana dashboard from json
 
-deploy cadvisor
-kubectl apply -f k8s/cadvisor
-https://grafana.com/grafana/dashboards/315 (not usefull)
-get dasboard from kube-prometheus

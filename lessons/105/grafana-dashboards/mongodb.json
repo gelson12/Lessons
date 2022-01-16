@@ -31,7 +31,7 @@
     "gnetId": 7353,
     "graphTooltip": 1,
     "id": 6,
-    "iteration": 1641747106675,
+    "iteration": 1642324373407,
     "links": [
         {
             "icon": "dashboard",
@@ -126,6 +126,218 @@
     "liveNow": false,
     "panels": [
         {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 9,
+                "w": 12,
+                "x": 0,
+                "y": 0
+            },
+            "hiddenSeries": false,
+            "id": 66,
+            "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "max": true,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "sort": "max",
+                "sortDesc": true,
+                "total": false,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.3.3",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(container_memory_working_set_bytes{container_label_io_kubernetes_container_name=\"$container\", container_label_io_kubernetes_pod_namespace=\"$namespace\"}) by (id, container_label_io_kubernetes_pod_name)",
+                    "interval": "",
+                    "legendFormat": "{{ container_label_io_kubernetes_pod_name }}",
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(container_spec_memory_limit_bytes{container_label_io_kubernetes_container_name=\"$container\", container_label_io_kubernetes_pod_namespace=\"$namespace\"}) by (container_label_io_kubernetes_pod_namespace,container_label_io_kubernetes_container_name) / count(container_memory_working_set_bytes{container_label_io_kubernetes_container_name=\"$container\", container_label_io_kubernetes_pod_namespace=\"$namespace\"}) by (container_label_io_kubernetes_container_name,container_label_io_kubernetes_pod_namespace)",
+                    "interval": "",
+                    "legendFormat": "limit",
+                    "refId": "B"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Memory Usage per Pod",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "transparent": true,
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:344",
+                    "format": "bytes",
+                    "logBase": 1,
+                    "min": "0",
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:345",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 9,
+                "w": 12,
+                "x": 12,
+                "y": 0
+            },
+            "hiddenSeries": false,
+            "id": 68,
+            "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "max": true,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "sort": "max",
+                "sortDesc": true,
+                "total": false,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.3.3",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(irate(container_cpu_usage_seconds_total{container_label_io_kubernetes_container_name=\"$container\", container_label_io_kubernetes_pod_namespace=\"$namespace\"}[60s])) by (id,container_label_io_kubernetes_pod_name)",
+                    "interval": "",
+                    "legendFormat": "{{ container_label_io_kubernetes_pod_name }}",
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(container_spec_cpu_quota{container_label_io_kubernetes_container_name=\"$container\", container_label_io_kubernetes_pod_namespace=\"$namespace\"} / container_spec_cpu_period{container_label_io_kubernetes_container_name=\"$container\", container_label_io_kubernetes_pod_namespace=\"$namespace\"}) by (container_label_io_kubernetes_pod_namespace,container_name) / count(container_memory_working_set_bytes{container_label_io_kubernetes_container_name=\"$container\", container_label_io_kubernetes_pod_namespace=\"$namespace\"}) by (container_label_io_kubernetes_pod_namespace,container_name) ",
+                    "interval": "",
+                    "legendFormat": "limit",
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "expr": "sum(container_spec_cpu_shares{container_label_io_kubernetes_container_name=\"$container\", container_label_io_kubernetes_pod_namespace=\"$namespace\", prometheus=\"$cluster\"} / 1024) by (container_label_io_kubernetes_pod_namespace,container_label_io_kubernetes_container_name) / count(container_spec_cpu_shares{container_label_io_kubernetes_container_name=\"$container\", container_label_io_kubernetes_pod_namespace=\"$namespace\", prometheus=\"$cluster\"}) by (container_label_io_kubernetes_pod_namespace,container_label_io_kubernetes_container_name) ",
+                    "interval": "",
+                    "legendFormat": "request",
+                    "refId": "C"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Cpu Usage per Pod",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "transparent": true,
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:271",
+                    "format": "short",
+                    "logBase": 1,
+                    "min": "0",
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:272",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
             "description": "Shows how many times a command is executed per second on average during the selected interval.",
             "fieldConfig": {
                 "defaults": {
@@ -183,7 +395,7 @@
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 0
+                "y": 9
             },
             "id": 15,
             "links": [],
@@ -311,7 +523,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 7
+                "y": 16
             },
             "id": 38,
             "links": [],
@@ -409,7 +621,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 7
+                "y": 16
             },
             "id": 25,
             "links": [],
@@ -507,7 +719,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 14
+                "y": 23
             },
             "id": 36,
             "links": [],
@@ -605,7 +817,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 14
+                "y": 23
             },
             "id": 40,
             "links": [],
@@ -664,7 +876,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 21
+                "y": 30
             },
             "height": "250px",
             "hiddenSeries": false,
@@ -824,7 +1036,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 21
+                "y": 30
             },
             "id": 64,
             "links": [],
@@ -936,7 +1148,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 28
+                "y": 37
             },
             "id": 41,
             "links": [],
@@ -1034,7 +1246,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 28
+                "y": 37
             },
             "id": 62,
             "links": [],
@@ -1147,7 +1359,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 35
+                "y": 44
             },
             "id": 37,
             "links": [],
@@ -1245,7 +1457,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 35
+                "y": 44
             },
             "id": 39,
             "links": [],
@@ -1286,7 +1498,7 @@
             "type": "timeseries"
         }
     ],
-    "refresh": "1m",
+    "refresh": "30s",
     "schemaVersion": 34,
     "style": "dark",
     "tags": [
@@ -1394,8 +1606,8 @@
                 "allFormat": "glob",
                 "current": {
                     "selected": false,
-                    "text": "10.0.99.215:9216",
-                    "value": "10.0.99.215:9216"
+                    "text": "10.0.77.101:9216",
+                    "value": "10.0.77.101:9216"
                 },
                 "datasource": {
                     "type": "prometheus",
@@ -1420,11 +1632,57 @@
                 "tagsQuery": "",
                 "type": "query",
                 "useTags": false
+            },
+            {
+                "current": {
+                    "selected": true,
+                    "text": "mongodb",
+                    "value": "mongodb"
+                },
+                "definition": "label_values(container_memory_working_set_bytes{container_label_io_kubernetes_pod_namespace =~\".+\", container_label_io_kubernetes_container_name !=\"POD\"},container_label_io_kubernetes_pod_namespace)",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Namespace",
+                "multi": false,
+                "name": "namespace",
+                "options": [],
+                "query": {
+                    "query": "label_values(container_memory_working_set_bytes{container_label_io_kubernetes_pod_namespace =~\".+\", container_label_io_kubernetes_container_name !=\"POD\"},container_label_io_kubernetes_pod_namespace)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "type": "query"
+            },
+            {
+                "current": {
+                    "selected": true,
+                    "text": "mongod",
+                    "value": "mongod"
+                },
+                "definition": "label_values(container_memory_working_set_bytes{container_label_io_kubernetes_pod_namespace =~\"$namespace\", container_label_io_kubernetes_container_name!=\"POD\"},container_label_io_kubernetes_container_name)",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Container",
+                "multi": false,
+                "name": "container",
+                "options": [],
+                "query": {
+                    "query": "label_values(container_memory_working_set_bytes{container_label_io_kubernetes_pod_namespace =~\"$namespace\", container_label_io_kubernetes_container_name!=\"POD\"},container_label_io_kubernetes_container_name)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "type": "query"
             }
         ]
     },
     "time": {
-        "from": "now-1h",
+        "from": "now-30m",
         "to": "now"
     },
     "timepicker": {
@@ -1457,6 +1715,6 @@
     "timezone": "browser",
     "title": "MongoDB",
     "uid": "6Lk9wMHik",
-    "version": 13,
+    "version": 2,
     "weekStart": ""
 }
