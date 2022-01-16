@@ -61,6 +61,9 @@ spec:
         - name: grafana-dashboard
           mountPath: "/var/lib/grafana/dashboards/kubernetes/grafana.json"
           subPath: grafana.json
+        - name: cert-manager-dashboard
+          mountPath: "/var/lib/grafana/dashboards/kubernetes/cert-manager.json"
+          subPath: cert-manager.json
         ports:
         - name: grafana
           containerPort: 3000
@@ -116,3 +119,6 @@ spec:
       - name: grafana-dashboard
         configMap:
           name: grafana-dashboard
+      - name: cert-manager-dashboard
+        configMap:
+          name: cert-manager-dashboard
