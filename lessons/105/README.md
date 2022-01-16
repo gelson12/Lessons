@@ -7,7 +7,7 @@ You can find tutorial [here]().
 - Install MongoDB on Kubernetes (Replica Set)
 - Install Cert-Manager on Kubernetes
 - Secure MongoDB with TLS/SSL
-- Configure External Access on AWS
+- Configure External Access
 - Install Prometheus and Grafana on Kubernetes
 - Monitor MongoDB with Prometheus
 
@@ -38,10 +38,7 @@ kubectl apply -f k8s/mongodb/crd.yaml
 kubectl apply -f k8s/mongodb/rbac
 kubectl apply -f k8s/mongodb/operator.yaml
 kubectl get pods -n mongodb
-kubectl logs \
-  -l name=mongodb-kubernetes-operator \
-  -n mongodb \
-  -f
+
 
 ## Install MongoDB on Kubernetes (Standalone/Single Replica)
 
@@ -252,4 +249,4 @@ run application after prometheus and grafana is configured, maybe load test
 
 import mongodb grafana dashboard from json
 
-kubectl delete -R k8s
+kubectl delete -R -f k8s
