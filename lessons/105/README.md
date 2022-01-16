@@ -139,6 +139,13 @@ cat /var/lib/tls/ca/ca.crt
 code certificateKey.pem
 code ca.pem
 
+kubectl exec -n mongodb my-mongodb-0 -c mongod -- cat /var/lib/tls/ca/ca.crt > ca.crt
+cat ca.crt
+
+kubectl get secrets -n mongodb my-mongodb-server-certificate-key -o yaml
+echo "ksfb" | base64 -d > certificateKey.pem
+cat certificateKey.pem
+
 mongosh \
   --tls \
   --tlsCAFile ca.pem \
@@ -149,7 +156,7 @@ mongosh \
   --tls \
   --tlsCAFile ca.pem \
   --tlsCertificateKeyFile certificateKey.pem \
-  "mongodb+srv://admin-user:devops123@my-mongodb.devopsbyexample.io/admin?ssl=true"
+  "mongodb+srv://admin-user:admin123@my-mongodb.devopsbyexample.io/admin?ssl=true&serverSelectionTimeoutMS=2000"
 
 ## Install Prometheus and Grafana on Kubernetes (v0.53.1)
 
@@ -202,6 +209,7 @@ Create user woth k8s object
 
 kubectl run -i --tty --rm busybox --image=busybox -- sh
 nslookup -q=SRV my-mongodb-svc.mongodb.svc.cluster.local
+nslookup -q=SRV _mongodb._tcp.my-mongodb.devopsbyexample.io
 
 my-mongodb-0.my-mongodb-svc.mongodb.svc.cluster.local
 
@@ -214,3 +222,4 @@ run application after prometheus and grafana is configured, maybe load test
 
 import mongodb grafana dashboard from json
 
+kubectl delete -R k8s
