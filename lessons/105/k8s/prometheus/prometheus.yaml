@@ -6,6 +6,7 @@ metadata:
   namespace: monitoring
 spec:
   replicas: 1
+  version: v2.32.1
   serviceAccountName: prometheus
   serviceMonitorNamespaceSelector:
     matchLabels:
