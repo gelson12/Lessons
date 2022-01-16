@@ -5,7 +5,7 @@ metadata:
   name: cadvisor
   namespace: monitoring
   labels:
-    team: devops
+    prometheus: default
 spec:
   selector:
     matchLabels:

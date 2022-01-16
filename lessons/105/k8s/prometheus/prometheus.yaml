@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
-  name: my-prometheus
+  name: default
   namespace: monitoring
 spec:
   replicas: 1
@@ -12,7 +12,7 @@ spec:
       monitoring: prometheus
   serviceMonitorSelector:
     matchLabels:
-      team: devops
+      prometheus: default
   securityContext:
     fsGroup: 65534
     runAsGroup: 65534

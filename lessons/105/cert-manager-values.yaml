@@ -4,4 +4,4 @@ prometheus:
   enabled: true
   servicemonitor:
     enabled: true
-    prometheusInstance: lesson-105
+    prometheusInstance: default

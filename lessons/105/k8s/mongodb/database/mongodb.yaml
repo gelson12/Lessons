@@ -24,17 +24,17 @@ spec:
       db: admin
     scramCredentialsSecretName: my-scram
   #### TLS START ####
-  # security:
-  #   tls:
-  #     enabled: true
-  #     certificateKeySecretRef:
-  #       name: mongodb-key-pair
-  #     caCertificateSecretRef:
-  #       name: mongodb-key-pair
-  #     # optional: true
-  #   authentication:
-  #     modes:
-  #     - SCRAM
+  security:
+    tls:
+      enabled: true
+      certificateKeySecretRef:
+        name: mongodb-key-pair
+      caCertificateSecretRef:
+        name: mongodb-key-pair
+      # optional: true
+    authentication:
+      modes:
+      - SCRAM
   #### TLS END ####
   additionalMongodConfig:
     storage.wiredTiger.engineConfig.journalCompressor: zlib

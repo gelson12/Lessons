@@ -5,7 +5,7 @@ metadata:
   name: mongodb
   namespace: mongodb
   labels:
-    team: devops
+    prometheus: default
 spec:
   endpoints:
   - port: metrics

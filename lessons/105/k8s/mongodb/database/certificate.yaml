@@ -8,7 +8,6 @@ spec:
   isCA: false
   duration: 2160h # 90d
   renewBefore: 360h # 15d
-  # commonName: "*.my-mongodb-svc.mongodb.svc.cluster.local"
   dnsNames:
   - my-mongodb-0.my-mongodb-svc.mongodb.svc.cluster.local
   - my-mongodb-1.my-mongodb-svc.mongodb.svc.cluster.local
