@@ -19,7 +19,7 @@ spec:
         image: percona/mongodb_exporter:0.30
         args:
         - "--mongodb.direct-connect=false"
-        - "--mongodb.uri=mongodb+srv://admin-user:devops123@my-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true&tlsCAFile=/var/lib/tls/ca/ca.crt&tlsCertificateKeyFile=/var/lib/tls/server/5efd116a7ca6c0f5d34aba75afcacc2d9d50ff1b28a4a64150c5df61a9b2b428.pem"
+        - "--mongodb.uri=mongodb+srv://admin-user:admin123@my-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true&tlsCAFile=/var/lib/tls/ca/ca.crt&tlsCertificateKeyFile=/var/lib/tls/server/certificateKey.pem"
         ports:
         - name: metrics
           containerPort: 9216
@@ -31,8 +31,9 @@ spec:
         - mountPath: /var/lib/tls/ca/
           name: tls-ca
           readOnly: true
-        - mountPath: /var/lib/tls/server/
+        - mountPath: /var/lib/tls/server/certificateKey.pem
           name: tls-secret
+          subPathExpr: e4a933fbd4c0b9ea7bbaa68b709919f09d406034ef5a07ea8d90cda740c5795f.pem
           readOnly: true
       volumes:
       - name: tls-ca

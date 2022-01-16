@@ -7,7 +7,6 @@ You can find tutorial [here]().
 - Install MongoDB on Kubernetes (Replica Set)
 - Install Cert-Manager on Kubernetes
 - Secure MongoDB with TLS/SSL
-- Configure Generic External Access with Node Port
 - Configure External Access on AWS
 - Install Prometheus and Grafana on Kubernetes
 - Monitor MongoDB with Prometheus
@@ -46,8 +45,8 @@ kubectl logs \
 
 ## Install MongoDB on Kubernetes (Standalone/Single Replica)
 
-kubectl apply -f k8s/mongodb/database/secret.yaml
-kubectl apply -f k8s/mongodb/database/mongodb.yaml
+kubectl apply -f k8s/mongodb/internal/secret.yaml
+kubectl apply -f k8s/mongodb/internal/mongodb.yaml
 kubectl get pods -n mongodb
 kubectl get pvc -n mongodb
 kubectl get secret my-mongodb-admin-admin-user -o yaml -n mongodb
@@ -90,6 +89,7 @@ explain why it's hard to connect from local host to primary
 
 rs.status()
 rs.printSecondaryReplicationInfo()
+kubectl delete -f k8s/mongodb/internal/mongodb.yaml
 
 
 ## Install Cert-Manager on Kubernetes
@@ -102,29 +102,43 @@ helm repo add jetstack \
 helm repo update
 
 kubectl create -f k8s/prometheus-operator/crds
+kubectl apply -f k8s/cert-manager/namespace.yaml
 
 helm install cert-105 jetstack/cert-manager \
   --namespace cert-manager \
   --version v1.6.1 \
-  --create-namespace \
-  --values cert-manager-values.yaml
+  --values k8s/cert-manager/helm-values.yaml
 
 
 ## Secure MongoDB with TLS/SSL
 
-kubectl exec -it my-mongodb-0 -- bash
+kubectl delete pvc ???
+
+kubectl apply -f k8s/mongodb/certificates/self-signed-issuer.yaml
+kubectl apply -f k8s/mongodb/certificates/ca.yaml
+kubectl apply -f k8s/mongodb/certificates/ca-issuer.yaml
+kubectl apply -f k8s/mongodb/internal/certificate.yaml
+kubectl apply -f k8s/mongodb/internal/mongodb.yaml
+
+kubectl exec -it my-mongodb-0 -c mongod -- bash
 
 mongosh \
   --tls \
   --tlsCAFile /var/lib/tls/ca/ca.crt \
   --tlsCertificateKeyFile /var/lib/tls/server/*.pem \
-  "mongodb+srv://admin-user:devops123@my-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true"
+  "mongodb+srv://admin-user:admin123@my-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true"
 
-mongosh \
-  --tls \
-  --tlsCAFile /var/lib/tls/ca/ca.crt \
-  --tlsCertificateKeyFile /var/lib/tls/server/*.pem \
-  "mongodb://admin-user:devops123@my-mongodb-0.devopsbyexample.io:27017,my-mongodb-1.devopsbyexample.io:27017,my-mongodb-2.devopsbyexample.io:27017/admin?directConnection=true&serverSelectionTimeoutMS=2000"
+## Configure External Access on AWS
+
+kubectl delete -f k8s/mongodb/internal/mongodb.yaml
+kubectl delete pvc -l app=my-mongodb-svc
+
+kubectl apply -f k8s/mongodb/external/secret.yaml
+kubectl apply -f k8s/mongodb/external/certificate.yaml
+kubectl apply -f k8s/mongodb/external/mongodb.yaml
+kubectl apply -f k8s/mongodb/external/services.yaml
+
+
 
 Create SRV record
 
@@ -134,10 +148,26 @@ _mongodb._tcp.my-mongodb
 0 50 27017 my-mongodb-1.devopsbyexample.io.
 0 50 27017 my-mongodb-2.devopsbyexample.io.
 
+kubectl exec -it my-mongodb-0 -c mongod -- bash
+
+mongosh \
+  --tls \
+  --tlsCAFile /var/lib/tls/ca/ca.crt \
+  --tlsCertificateKeyFile /var/lib/tls/server/*.pem \
+  "mongodb+srv://admin-user:admin123@my-mongodb-svc.mongodb.svc.cluster.local/admin?ssl=true"
+
+
+
+mongosh \
+  --tls \
+  --tlsCAFile /var/lib/tls/ca/ca.crt \
+  --tlsCertificateKeyFile /var/lib/tls/server/*.pem \
+  "mongodb://admin-user:admin123@my-mongodb-0.devopsbyexample.io:27017,my-mongodb-1.devopsbyexample.io:27017,my-mongodb-2.devopsbyexample.io:27017/admin?directConnection=true&serverSelectionTimeoutMS=2000"
+
 cat /var/lib/tls/server/*.pem
 cat /var/lib/tls/ca/ca.crt
 code certificateKey.pem
-code ca.pem
+code ca.crt
 
 kubectl exec -n mongodb my-mongodb-0 -c mongod -- cat /var/lib/tls/ca/ca.crt > ca.crt
 cat ca.crt
@@ -148,13 +178,13 @@ cat certificateKey.pem
 
 mongosh \
   --tls \
-  --tlsCAFile ca.pem \
+  --tlsCAFile ca.crt \
   --tlsCertificateKeyFile certificateKey.pem \
-  "mongodb://admin-user:devops123@my-mongodb-0.devopsbyexample.io:27017,my-mongodb-1.devopsbyexample.io:27017,my-mongodb-2.devopsbyexample.io:27017/admin?serverSelectionTimeoutMS=2000"
+  "mongodb://admin-user:admin123@my-mongodb-0.devopsbyexample.io:27017,my-mongodb-1.devopsbyexample.io:27017,my-mongodb-2.devopsbyexample.io:27017/admin?serverSelectionTimeoutMS=2000"
 
 mongosh \
   --tls \
-  --tlsCAFile ca.pem \
+  --tlsCAFile ca.crt \
   --tlsCertificateKeyFile certificateKey.pem \
   "mongodb+srv://admin-user:admin123@my-mongodb.devopsbyexample.io/admin?ssl=true&serverSelectionTimeoutMS=2000"
 

@@ -5,7 +5,7 @@ metadata:
   name: my-mongodb
   namespace: mongodb
 spec:
-  members: 3 # scale up from 1 to 3
+  members: 1 # scale up from 1 to 3
   type: ReplicaSet
   version: "5.0.5"
   security:
@@ -24,17 +24,17 @@ spec:
       db: admin
     scramCredentialsSecretName: my-scram
   #### TLS START ####
-  security:
-    tls:
-      enabled: true
-      certificateKeySecretRef:
-        name: mongodb-key-pair
-      caCertificateSecretRef:
-        name: mongodb-key-pair
-      # optional: true
-    authentication:
-      modes:
-      - SCRAM
+  # security:
+  #   tls:
+  #     enabled: true
+  #     certificateKeySecretRef:
+  #       name: mongodb-key-pair
+  #     caCertificateSecretRef:
+  #       name: mongodb-key-pair
+  #     # optional: true
+  #   authentication:
+  #     modes:
+  #     - SCRAM
   #### TLS END ####
   additionalMongodConfig:
     storage.wiredTiger.engineConfig.journalCompressor: zlib
