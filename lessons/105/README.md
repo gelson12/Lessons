@@ -44,6 +44,7 @@ kubectl get pods -n mongodb
 
 kubectl apply -f k8s/mongodb/internal/secret.yaml
 kubectl apply -f k8s/mongodb/internal/mongodb.yaml
+
 kubectl get pods -n mongodb
 kubectl get pvc -n mongodb
 kubectl get secret my-mongodb-admin-admin-user -o yaml -n mongodb
@@ -51,7 +52,7 @@ kubectl get secret my-mongodb-admin-admin-user -o yaml -n mongodb
 kubectl get secret my-mongodb-admin-admin-user -n mongodb -o json | jq -r '.data | with_entries(.value |= @base64d)'
 
 
-install MongoDB Shell
+
 brew install mongosh
 
 (go over connection string formets) Connection String URI Format - https://docs.mongodb.com/manual/reference/connection-string/
