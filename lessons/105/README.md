@@ -250,3 +250,21 @@ run application after prometheus and grafana is configured, maybe load test
 import mongodb grafana dashboard from json
 
 kubectl delete -R -f k8s
+
+
+
+############## NEW ##############
+
+## Install MongoDB Kubernetes Operator
+
+Create file
+- k8s/mongodb/namespace.yaml
+
+Apply
+
+kubectl apply -f \
+  k8s/mongodb/namespace.yaml
+  k8s/mongodb/crd.yaml \
+  k8s/mongodb/rbac
+  k8s/mongodb/operator.yaml
+
