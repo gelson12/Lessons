@@ -257,14 +257,13 @@ kubectl delete -R -f k8s
 
 ## Install MongoDB Kubernetes Operator
 
-Create file
-- k8s/mongodb/namespace.yaml
+git checkout -- k8s/mongodb/namespace.yaml
+git checkout -- k8s/mongodb/crd.yaml
+git checkout -- k8s/mongodb/rbac
+git checkout -- k8s/mongodb/operator.yaml
 
-Apply
+kubectl apply -R -f k8s/mongodb
 
-kubectl apply -f \
-  k8s/mongodb/namespace.yaml
-  k8s/mongodb/crd.yaml \
-  k8s/mongodb/rbac
-  k8s/mongodb/operator.yaml
+kubectl get pods -n mongodb
 
+## Install MongoDB on Kubernetes (Standalone/Single Replica)
