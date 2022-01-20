@@ -33,7 +33,7 @@ spec:
           readOnly: true
         - mountPath: /var/lib/tls/server/certificateKey.pem
           name: tls-secret
-          subPathExpr: e4a933fbd4c0b9ea7bbaa68b709919f09d406034ef5a07ea8d90cda740c5795f.pem
+          subPathExpr: 847a4797b0b13045ba3c76ff71dd689334b2f15b25857791c0e88ac39983d03e.pem
           readOnly: true
       volumes:
       - name: tls-ca
